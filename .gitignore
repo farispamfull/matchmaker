@@ -5,10 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
+media
 
 # Distribution / packaging
 .Python
-build/
 develop-eggs/
 dist/
 downloads/
@@ -128,23 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Папки, создаваемые средой разработки
+# .idea
 .idea
-.DS_Store
-.AppleDouble
-.LSOverride
-
-*.sublime-project
-*.sublime-workspace
-
-.vscode/
-*.code-workspace
-
-# Local History for Visual Studio Code
-.history/
-
-.mypy_cache
-
-# папки со статикой и медиа
-media/
-

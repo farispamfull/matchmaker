@@ -1,10 +1,10 @@
-import os
-
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from users.utils import Util
 
 
 def upload_to(instance, filename):
@@ -74,6 +74,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('first_name', 'last_name')
     objects = UserManager()
+
+    # def save(self, *args, **kwargs):
+    #     super(User, self).save(*args, **kwargs)
+    #     if self.avatar:
+    #         image_patch = str(self.avatar)
+    #         Util.compress_image(image_patch)
 
     def __str__(self):
         return self.email
