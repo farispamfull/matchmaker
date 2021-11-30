@@ -75,11 +75,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ('first_name', 'last_name')
     objects = UserManager()
 
-    # def save(self, *args, **kwargs):
-    #     super(User, self).save(*args, **kwargs)
-    #     if self.avatar:
-    #         image_patch = str(self.avatar)
-    #         Util.compress_image(image_patch)
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+        if self.avatar:
+            image_patch = str(self.avatar)
+            Util.compress_image(image_patch)
 
     def __str__(self):
         return self.email

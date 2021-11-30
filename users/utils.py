@@ -17,4 +17,23 @@ class Util:
             email = email_name.lower() + '@' + domain_part.lower()
         return email
 
+    @staticmethod
+    def compress_image(photo, text='Matchmaker Copyright', size=40):
+        upload = 'media/' + photo
+        image = Image.open(upload)
+        width, height = image.size
+
+        draw = ImageDraw.Draw(image)
+        text = text
+
+        font = ImageFont.truetype('arial.ttf', size)
+        textwidth, textheight = draw.textsize(text, font)
+
+        margin = 10
+        x = width - textwidth - margin
+        y = height - textheight - margin
+
+        draw.text((x, y), text, font=font)
+
+        image.save(upload)
 
