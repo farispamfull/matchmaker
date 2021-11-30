@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from api import models as api_models
 from users.utils import Util
 
 
@@ -80,6 +81,25 @@ class User(AbstractBaseUser, PermissionsMixin):
         if self.avatar:
             image_patch = str(self.avatar)
             Util.compress_image(image_patch)
+
+    def is_swiper(self, user) -> bool:
+
+        if not user.is_authenticated:
+            return False
+        if api_models.Match.objects.filter(
+                swiped=user, swiper=self
+        ).exists():
+            return True
+        return False
+
+    def is_swiped(self, user) -> bool:
+        if not user.is_authenticated:
+            return False
+        if api_models.Match.objects.filter(
+                swiped=self, swiper=user
+        ).exists():
+            return True
+        return False
 
     def __str__(self):
         return self.email

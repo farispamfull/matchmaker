@@ -9,10 +9,16 @@ User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(required=True)
+    is_swiped = serializers.SerializerMethodField(read_only=True)
+
+    def get_is_swiped(self, obj):
+        user = self.context['request'].user
+
+        return obj.is_swiped(user)
 
     class Meta:
         fields = ('id', 'first_name', 'last_name',
-                  'email', 'avatar', 'gender', 'password',)
+                  'email', 'avatar', 'gender', 'password', 'is_swiped')
         extra_kwargs = {'password': {'write_only': True,
                                      'validators': [validate_password]},
                         'id': {'read_only': True},
