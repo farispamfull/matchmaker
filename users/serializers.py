@@ -13,7 +13,6 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_is_swiped(self, obj):
         user = self.context['request'].user
-
         return obj.is_swiped(user)
 
     class Meta:

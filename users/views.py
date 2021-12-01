@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action, api_view
 from rest_framework.mixins import DestroyModelMixin
@@ -5,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from api.filters import UserFilter
 from .models import User
 from .serializers import (UserSerializer, ChangePasswordSerializer,
                           )
@@ -12,6 +14,8 @@ from .serializers import (UserSerializer, ChangePasswordSerializer,
 
 class UserViewSet(ReadOnlyModelViewSet, DestroyModelMixin):
     queryset = User.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filter_class = UserFilter
 
     def get_serializer_class(self):
         if self.action == 'set_password':

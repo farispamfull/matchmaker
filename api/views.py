@@ -38,5 +38,5 @@ class MatchView(APIView):
         if match_obj:
             match_obj.first().delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        error = {'errors': 'Вы еще не поставили симпатию на этого человека'}
+        error = {'errors': 'Вы еще не поставили симпатию человеку'}
         return Response(data=error, status=status.HTTP_400_BAD_REQUEST)
