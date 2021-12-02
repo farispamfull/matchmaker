@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.models import Match
-from api.serializers import UserSerializer
+from users.serializers import UserSerializer
 from users.utils import Util
 from .models import User
 
