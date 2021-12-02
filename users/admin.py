@@ -20,6 +20,7 @@ class CustomUserAdmin(BaseUserAdmin):
         ('Groups', {'fields': ('groups',)}),
         ('Permissions', {'fields': ('user_permissions',)}),
     )
+
     add_fieldsets = (
         (None, {'fields': (
             'email', 'is_staff', 'is_superuser', 'password1', 'password2')}),
