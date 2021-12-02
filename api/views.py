@@ -16,6 +16,12 @@ class MatchView(APIView):
     def get(self, request, user_id):
         swiper = request.user
         swiped = get_object_or_404(User, id=user_id)
+
+        # ограничение на уровне контроллера
+        if swiper == swiped:
+            errors = {'errors': 'Нельзя поставить себе симпатию'}
+            return Response(data=errors, status=status.HTTP_400_BAD_REQUEST)
+
         obj, create = Match.objects.get_or_create(swiper=swiper, swiped=swiped)
 
         if create:
@@ -26,8 +32,8 @@ class MatchView(APIView):
                                           match_user=swiper)
 
             serializer = UserSerializer(swiped, context={'request': request})
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         errors = {'errors': 'Вы уже поставили симпатию этому человеку'}
         return Response(data=errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -35,8 +41,10 @@ class MatchView(APIView):
         swiped = get_object_or_404(User, id=user_id)
         user = request.user
         match_obj = user.swiped.filter(swiped=swiped)
+
         if match_obj:
             match_obj.first().delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+
         error = {'errors': 'Вы еще не поставили симпатию человеку'}
         return Response(data=error, status=status.HTTP_400_BAD_REQUEST)

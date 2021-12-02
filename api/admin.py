@@ -5,5 +5,5 @@ from .models import Match
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
-    list_display = ('id', 'swiper', 'swiped')
-    list_filter = ('swiper', 'swiped')
+    list_display = ('swiper', 'swiped')
+    list_filter = ('swiper__email', 'swiped__email')

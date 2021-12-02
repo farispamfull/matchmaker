@@ -8,18 +8,17 @@ class Util:
     @staticmethod
     def send_match_for_email(request, from_user, match_user):
         mail_subject = get_current_site(request).domain
-        relative_link = 'find match'
         send_mail(f'find match from {mail_subject}',
 
-                  f'У вас появилась взаиная симпатия:\n'
+                  f'У вас появилась взаимная симпатия:\n'
                   f'{match_user.first_name} {match_user.last_name}\n'
                   f'{match_user.email}\n'
                   f'Удачного вам знакомства, {from_user.first_name}',
 
-                  f'{settings.EMAIL_FROM}@{mail_subject}',
+                  f'{settings.EMAIL_HOST_USER}',
 
                   [from_user.email],
-                  fail_silently=False,)
+                  fail_silently=False, )
 
     @staticmethod
     def normalize_email(email):

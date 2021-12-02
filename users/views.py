@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from api.filters import UserFilter
+from api.permissions import AdminOrReadOnlyPermission
 from .models import User
 from .serializers import (UserSerializer, ChangePasswordSerializer,
                           )
@@ -16,6 +17,7 @@ class UserViewSet(ReadOnlyModelViewSet, DestroyModelMixin):
     queryset = User.objects.all()
     filter_backends = [DjangoFilterBackend]
     filter_class = UserFilter
+    permission_classes = [AdminOrReadOnlyPermission]
 
     def get_serializer_class(self):
         if self.action == 'set_password':
@@ -23,9 +25,17 @@ class UserViewSet(ReadOnlyModelViewSet, DestroyModelMixin):
         else:
             return UserSerializer
 
-    @action(detail=False, methods=['get'],
+    @action(detail=False, methods=['get', 'patch'],
             permission_classes=[IsAuthenticated])
     def me(self, request):
+        if request.method == 'PATCH':
+            serializer = UserSerializer(request.user, data=request.data,
+                                        partial=True,
+                                        context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+
         serializer = self.get_serializer(request.user)
         return Response(serializer.data)
 

@@ -31,7 +31,6 @@ class LoginView(GenericAPIView):
         return self.get_response()
 
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def user_logout(request):

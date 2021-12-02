@@ -18,6 +18,6 @@ class Match(models.Model):
             ),
             models.CheckConstraint(
                 name="%(app_label)s_%(class)s_prevent_self_match",
-                check=~models.Q(user=models.F("swiper"))
+                check=~models.Q(swiped=models.F("swiper"))
             ),
         ]
