@@ -1,12 +1,18 @@
 # Matchmaker
-
-* [Техническое задание](#тз)
-* [Описание проекта](#описание)
-* [Процесс регистрации](#регистрация)
+[![Django-app workflow](https://github.com/farispamfull/matchmaker/actions/workflows/matchmaker.yml/badge.svg?branch=main)](https://github.com/farispamfull/matchmaker/actions/workflows/matchmaker.yml)
+* [Техническое задание](#tech-task)
+* [Описание проекта](#description)
+* [Процесс регистрации](#registations)
 * [API](#api)
 
+Вход в админку:
 
-## Техническое задание
+farispamfull@gmail.com
+581360004564
+
+Приложение по адресу: http://3.124.145.142/
+
+## Техническое задание <a name="tech-task"></a>
 
 Задачи:
 * Создать модель участников. У участника должна быть аватарка, пол, имя и фамилия, почта.
@@ -19,20 +25,26 @@ https://en.wikipedia.org/wiki/Great-circle_distance
 * Задеплоить проект на любом удобном для вас хостинге, сервисах PaaS (Heroku) и т.п. Должна быть возможность просмотреть реализацию всех задач. Если есть какие-то особенности по тестированию, написать в Readme. Там же оставить ссылку/ссылки на АПИ проекта
 
 
-## Описание проекта
+## Описание проекта <a name="description"></a>
 
-В качестве аутентификация выбран authtoken. Такой способ отлично подходит для подключения в будущем одностраничного приложения через фронт. Реализован контроллер для logout.
+* В качестве аутентификация выбран authtoken. Такой способ отлично подходит для подключения в будущем одностраничного приложения через фронт. Реализован контроллер для logout.
 
-Реализованы новые endpoints, которые расширяют и дополняют проект.
+* Реализованы новые endpoints, которые расширяют и дополняют проект.
 
-В качестве деплоя выбран AWS сервер с СI/CD через github actions. Проект находится в связке postgres + Nginx + django в контейнере docker-compose.
+* реализована новая роль moderator 
+
+* Настроена админка
+
+* Созданы новые фильтра по тому, кто тебе дал match и кому ты дал match
+
+* В качестве деплоя выбран AWS сервер с СI/CD через github actions. Проект находится в связке postgres + Nginx + django в контейнере docker-compose.
 
 Что не удалось сделать:
 
 Не удалось подключить координаты. Была выбрана библиотека Django gis и надстройка для postgres для пространственных вычислений.  Других способов оптимизировать запросы и вычислять расстояние по координатам не нашлось. Было потрачено много времени на то, чтобы победить зависимости, но библиотеки так и не заработали. Хотя в целом, контроллеры локально уже были сделаны для эффективной фильтрации через мощные возможности django orm. 
 
-## Процесс регистрации 
-1. Пользователь отправляет post запрос с параметрами  `email`,`first_name`,`last_name`,`gender`,`avatar`,`password` на `/clients/`.
+## Процесс регистрации <a name="registations"></a>
+1. Пользователь отправляет post запрос с параметрами  `email`,`first_name`,`last_name`,`gender`,`avatar`,`password` на `/clients/create/`.
 2. Далее пользователь отправляет запрос с параметрами `email`,`password` на `auth/token/login/`
 3. Сервер в ответ отправляет его токен (authtoken)
 
@@ -59,23 +71,26 @@ https://en.wikipedia.org/wiki/Great-circle_distance
 **clients/:id/** 
 
 * get
-* delete
+* delete (permissions: moderator/staff)
+
+Доступная фильтрация: gender(str), first_name(str), last_name(str), is_swiped(bool), is_swiper(bool)
+
 
 **clients/create/**
 
 * post
 
-**clients/set_password/**
+**clients/set_password/** 
 
-* post
+* post (permissions: authentication)
 
 **clients/me/**
 
-* get
-* patch
+* get (permissions: authentication)
+* patch (permissions: authentication)
 
 **clients/:id/match/**
 
-* get
-* delete
+* get (permissions: authentication)
+* delete (permissions: authentication)
 

@@ -13,7 +13,7 @@ router_v1.register('clients', UserViewSet, basename='client')
 auth_patterns = [
     path('token/logout/',
          user_logout,
-         name='user_logout'),
+         name='user_logout/'),
     path('token/login/',
          LoginView.as_view(),
          name='login_user'), ]
