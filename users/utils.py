@@ -44,7 +44,7 @@ class Util:
         draw = ImageDraw.Draw(image)
         text = text
 
-        font = ImageFont.truetype('arial.ttf', size)
+        font = ImageFont.load_default()
         textwidth, textheight = draw.textsize(text, font)
 
         margin = 10
