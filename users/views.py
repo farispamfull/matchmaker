@@ -52,7 +52,8 @@ class UserViewSet(ReadOnlyModelViewSet, DestroyModelMixin):
 
 @api_view(['POST'])
 def user_create(request):
-    serializer = UserSerializer(data=request.data)
+    serializer = UserSerializer(data=request.data,
+                                context={'request': request})
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response(serializer.data)
