@@ -39,12 +39,14 @@ https://en.wikipedia.org/wiki/Great-circle_distance
 
 * В качестве деплоя выбран AWS сервер с СI/CD через github actions. Проект находится в связке postgres + Nginx + django в контейнере docker-compose.
 
-Что не удалось сделать:
+* Фильтрация по дистанции (км) - происходит по query param `distance` (int)
 
-Не удалось подключить координаты. Была выбрана библиотека Django gis и надстройка для postgres для пространственных вычислений.  Других способов оптимизировать запросы и вычислять расстояние по координатам не нашлось. Было потрачено много времени на то, чтобы победить зависимости, но библиотеки так и не заработали. Хотя в целом, контроллеры локально уже были сделаны для эффективной фильтрации через мощные возможности django orm. 
+* Использован django gis и postgis для быстрых пространственных вычислений
+
+
 
 ## Процесс регистрации <a name="registations"></a>
-1. Пользователь отправляет post запрос с параметрами  `email`,`first_name`,`last_name`,`gender`,`avatar`,`password` на `/clients/create/`.
+1. Пользователь отправляет post запрос с параметрами  `email`,`first_name`,`last_name`,`gender(female/male)`,`avatar`,`password` на `/clients/create/`.
 2. Далее пользователь отправляет запрос с параметрами `email`,`password` на `auth/token/login/`
 3. Сервер в ответ отправляет его токен (authtoken)
 
@@ -65,15 +67,17 @@ https://en.wikipedia.org/wiki/Great-circle_distance
 
 **clients/**
  
-* get
+* get (permissions: authentication)
+
+Доступная фильтрация: gender(str), first_name(str), last_name(str), is_swiped(bool), is_swiper(bool), distance(int)
 
 
 **clients/:id/** 
 
-* get
+* get (permissions: authentication)
 * delete (permissions: moderator/staff)
 
-Доступная фильтрация: gender(str), first_name(str), last_name(str), is_swiped(bool), is_swiper(bool)
+
 
 
 **clients/create/**
