@@ -53,11 +53,11 @@ class UserManager(BaseUserManager):
         return user
 
 
-class gisAbstractBaseUser(AbstractBaseUser, models.Model):
+class GisAbstractBaseUser(AbstractBaseUser, models.Model):
     pass
 
 
-class User(gisAbstractBaseUser, PermissionsMixin):
+class User(GisAbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         max_length=50, verbose_name='First name')
     last_name = models.CharField(
