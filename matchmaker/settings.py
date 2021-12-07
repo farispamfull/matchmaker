@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -44,6 +43,8 @@ INSTALLED_APPS = [
     'api',
     'users',
     'authentication',
+    'django.contrib.gis',
+    'mapwidgets',
 
 ]
 
@@ -80,9 +81,22 @@ WSGI_APPLICATION = 'matchmaker.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+#         'NAME': os.environ.get('DB_NAME',
+#                                os.path.join(BASE_DIR, 'db.sqlite3')),
+#         'USER': os.environ.get('POSTGRES_USER', 'user'),
+#         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
+#         'HOST': os.environ.get('DB_HOST', 'localhost'),
+#         'PORT': os.environ.get('DB_PORT', '5432')
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+        'ENGINE': os.environ.get('DB_ENGINE',
+                                 'django.contrib.gis.db.backends.postgis'),
         'NAME': os.environ.get('DB_NAME',
                                os.path.join(BASE_DIR, 'db.sqlite3')),
         'USER': os.environ.get('POSTGRES_USER', 'user'),
@@ -91,7 +105,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '5432')
     }
 }
-
 REST_FRAMEWORK = {
 
     'DEFAULT_AUTHENTICATION_CLASSES': [

@@ -1,3 +1,5 @@
+from django.contrib.gis.db.models.functions import GeometryDistance
+from django.contrib.gis.measure import D
 from django_filters import rest_framework as filters
 
 
@@ -9,6 +11,18 @@ class UserFilter(filters.FilterSet):
                                    lookup_expr='icontains')
     is_swiped = filters.BooleanFilter(method='filter_is_swiped')
     is_swiper = filters.BooleanFilter(method='filter_is_swiper')
+    distance = filters.NumberFilter(method='filter_distance')
+
+    def filter_distance(self, queryset, name, value):
+
+        ref_location = self.request.user.location
+        distance = value
+        result = queryset.filter(
+            location__dwithin=(ref_location, D(km=distance))).annotate(
+            distance=GeometryDistance("location", ref_location)).order_by(
+            "distance")
+
+        return result
 
     def filter_is_swiper(self, queryset, name, value):
         if value is True:

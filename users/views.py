@@ -17,7 +17,7 @@ class UserViewSet(ReadOnlyModelViewSet, DestroyModelMixin):
     queryset = User.objects.all()
     filter_backends = [DjangoFilterBackend]
     filter_class = UserFilter
-    permission_classes = [AdminOrReadOnlyPermission]
+    permission_classes = [IsAuthenticated & AdminOrReadOnlyPermission]
 
     def get_serializer_class(self):
         if self.action == 'set_password':

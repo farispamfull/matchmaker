@@ -1,6 +1,7 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager,
                                         PermissionsMixin)
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -52,7 +53,11 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class gisAbstractBaseUser(AbstractBaseUser, models.Model):
+    pass
+
+
+class User(gisAbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(
         max_length=50, verbose_name='First name')
     last_name = models.CharField(
@@ -71,6 +76,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(_('updated'), auto_now=True)
     role = models.CharField(max_length=10, blank=True,
                             choices=UserRoles.choices, default=UserRoles.USER)
+    location = models.PointField(default=Point(0.0, 0.0), geography=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('first_name', 'last_name')

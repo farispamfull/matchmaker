@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.contrib.gis.geos import fromstr
 from rest_framework import serializers
 
 from users.utils import Util
@@ -15,12 +16,23 @@ class UserSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         return obj.is_swiped(user)
 
+    def to_representation(self, instance):
+        ret = super(UserSerializer, self).to_representation(
+            instance)
+        pnt = fromstr(ret['location'])
+        ret['location'] = {'longitude': pnt.coords[0],
+                           'latitude': pnt.coords[1]}
+        return ret
+
     class Meta:
         fields = ('id', 'first_name', 'last_name',
-                  'email', 'avatar', 'gender', 'password', 'is_swiped')
+                  'email', 'avatar', 'gender', 'password', 'is_swiped',
+                  'location')
         extra_kwargs = {'password': {'write_only': True,
                                      'validators': [validate_password]},
                         'id': {'read_only': True},
+                        'locations': {'read_only': True},
+
                         'gender': {'required': True}, }
 
         model = User

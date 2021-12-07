@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:12.4
+    image: postgis/postgis:latest
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env
+      - dev/.env
   web:
     image: 58v13e60o004564/matchmaker:latest
     restart: always
@@ -19,7 +19,7 @@ services:
     depends_on:
       - db
     env_file:
-      - ./.env
+      - dev/.env
 
   nginx:
     image: nginx:1.19.3

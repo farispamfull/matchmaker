@@ -36,7 +36,7 @@ class Util:
         return email
 
     @staticmethod
-    def compress_image(photo, text='Matchmaker Copyright', size=40):
+    def compress_image(photo, text='Matchmaker Copyright', size=100):
         upload = 'media/' + photo
         image = Image.open(upload)
         width, height = image.size
